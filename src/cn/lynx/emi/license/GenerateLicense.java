@@ -9,15 +9,17 @@ import java.io.ObjectOutputStream;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.crypto.Cipher;
 
 import org.apache.commons.codec.binary.Base64;
 
 public class GenerateLicense {
-	public static void main(String[] args) throws ClassNotFoundException {
-		if (args == null || args.length != 3) {
-			System.err.println("Please provide [machine code] [cpu] [memory in gb] as parameter");
+	public static void main(String[] args) throws ClassNotFoundException, ParseException {
+		if (args == null || args.length != 4) {
+			System.err.println("Please provide [machine code] [cpu] [memory in gb] [yyyy-MM-dd] as parameter");
 			return;
 		}
 		
@@ -40,11 +42,14 @@ public class GenerateLicense {
 		String machineCode = args[0];
 		int cpu = Integer.parseInt(args[1]);
 		long mem = Long.parseLong(args[2]) * 1024 * 1024 * 1024;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		long expDate = sdf.parse(args[3]).getTime();
 		
 		LicenseBean lb = new LicenseBean();
 		lb.setCpuCount(cpu);
 		lb.setMemCount(mem);
 		lb.setMachineCode(machineCode);
+		lb.setExpireDate(expDate);
 		
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();

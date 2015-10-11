@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Date;
 
 import javax.crypto.Cipher;
 
@@ -32,6 +33,7 @@ public class ViewLicense {
 			System.out.println("LB Machine Code:" + lb.getMachineCode());
 			System.out.println("LB CPU:" + lb.getCpuCount());
 			System.out.println("LB Mem:" + lb.getMemCount());
+			System.out.println("LB Exp:" + new Date(lb.getExpireDate()));
 		}
 	}
 	
