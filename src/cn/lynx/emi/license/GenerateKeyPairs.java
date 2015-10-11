@@ -23,7 +23,7 @@ public class GenerateKeyPairs {
 
 		String myPubKey = Base64.encodeBase64String(pubkey.getEncoded());
 		String myPriKey = Base64.encodeBase64String(prikey.getEncoded());
-
+		System.out.println(prikey);
 		System.out.println("pubKey=" + myPubKey);
 		System.out.println("priKey=" + myPriKey);
 	}
