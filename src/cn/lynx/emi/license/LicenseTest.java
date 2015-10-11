@@ -55,7 +55,8 @@ public class LicenseTest {
 	}
 	
 	public static final LicenseBean retrieveLicense(String license) throws UnsupportedEncodingException {
-		String decryptedLicense = _decryptByPubKey(new String(Base64.decodeBase64(license), "UTF-8"));
+		String decryptedLicense = _decryptByPubKey(license);
+		System.out.println("Decrypted :" + decryptedLicense);
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(decryptedLicense.getBytes("UTF-8")));
 			LicenseBean bean = (LicenseBean) ois.readObject();
@@ -75,9 +76,9 @@ public class LicenseTest {
 
 	private static final String _cryptoByKey(String data, int mode) throws UnsupportedEncodingException {
 		byte[] corekey = Base64.decodeBase64(LICENSE_CORE_KEY);
-
+		byte[] rawData = Base64.decodeBase64(data);
+		
 		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(corekey);
-		System.out.println("decrypt data:" + data.getBytes("UTF-8").length);
 		try {
 			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 			Key publicKey = keyFactory.generatePublic(x509EncodedKeySpec);
@@ -85,7 +86,7 @@ public class LicenseTest {
 			Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
 			cipher.init(mode, publicKey);
 			
-			return Base64.encodeBase64String(cipher.doFinal(data.getBytes("UTF-8")));
+			return new String(cipher.doFinal(rawData), "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
